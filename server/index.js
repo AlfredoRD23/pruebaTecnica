@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql2/promise');
 const productividadRouter = require('./routes/productividad');
+const ventasRouter = require('./routes/ventas');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -23,8 +24,9 @@ const initDB = async () => {
       connectionLimit: 10,
       queueLimit: 0
     });
-    console.log('Pool de MySQL creado ✅');
-    app.use('/api', productividadRouter(pool));
+  console.log('Pool de MySQL creado ✅');
+  app.use('/api', productividadRouter(pool));
+  app.use('/api', ventasRouter(pool));
   } catch (err) {
     console.error('Error creando pool de MySQL:', err);
   }

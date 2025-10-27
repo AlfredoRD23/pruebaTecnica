@@ -1,0 +1,11 @@
+IdVenta,IdCliente,FechaVenta,Monto,NombreProducto
+1001,1,2025-09-01,1500.50,Préstamo Personal
+1002,1,2025-09-03,2000.00,Cuenta Ahorro Básica
+1003,2,2025-09-05,500.00,Cuenta Corriente Plus
+1004,2,2025-09-07,3000.00,Tarjeta Visa Classic
+1005,3,2025-09-06,100.00,Tarjeta Mastercard Gold
+1006,3,2025-09-08,15000.00,Préstamo Personal
+1007,4,2025-09-09,7000.00,Tarjeta Visa Classic
+1008,4,2025-09-10,12000.00,Préstamo Negocio
+1009,1,2025-09-11,1000.00,Cuenta Corriente Plus
+1010,2,2025-09-12,800.00,Cuenta Ahorro Básica
