@@ -121,5 +121,20 @@ module.exports = (pool) => {
     }
   });
 
+  router.get('/productos', async (req, res) => {
+    let connection;
+    try {
+      connection = await pool.getConnection();
+      const [rows] = await connection.execute('SELECT IdProducto, NombreProducto FROM Producto ORDER BY NombreProducto');
+      res.json(rows);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Error al obtener productos' });
+    } finally {
+      if (connection) connection.release();
+    }
+  });
+
   return router;
 };
+
