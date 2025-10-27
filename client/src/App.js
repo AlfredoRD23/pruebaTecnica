@@ -25,11 +25,14 @@ function App() {
   };
 
   const calcularTotales = () => {
-    return productividad.reduce((totales, ejecutivo) => ({
-      totalVisitas: totales.totalVisitas + ejecutivo.totalVisitas,
-      totalVentas: totales.totalVentas + ejecutivo.totalVentas,
-      montoTotal: totales.montoTotal + ejecutivo.montoTotalVentas
-    }), { totalVisitas: 0, totalVentas: 0, montoTotal: 0 });
+    return productividad.reduce(
+      (totales, ejecutivo) => ({
+        totalVisitas: totales.totalVisitas + (ejecutivo.totalVisitas ?? 0),
+        totalVentas: totales.totalVentas + (ejecutivo.totalVentas ?? 0),
+        montoTotal: totales.montoTotal + (ejecutivo.montoTotalVentas ?? 0),
+      }),
+      { totalVisitas: 0, totalVentas: 0, montoTotal: 0 }
+    );
   };
 
   const totales = calcularTotales();
@@ -49,6 +52,7 @@ function App() {
         <p>Análisis de Productividad Comercial por Ejecutivo</p>
       </div>
 
+
       {error && <div className="error">{error}</div>}
 
       <div className="stats-grid">
@@ -61,7 +65,9 @@ function App() {
           <div className="stat-label">Total Ventas</div>
         </div>
         <div className="stat-card">
-          <div className="stat-value">${totales.montoTotal.toLocaleString()}</div>
+          <div className="stat-value">
+            ${ (totales.montoTotal ?? 0).toLocaleString() }
+          </div>
           <div className="stat-label">Monto Total</div>
         </div>
         <div className="stat-card">
@@ -87,17 +93,17 @@ function App() {
             </thead>
             <tbody>
               {productividad.map((ejecutivo, index) => (
-                <tr key={ejecutivo.idEjecutivo}>
+                <tr key={ejecutivo.idEjecutivo ?? index}>
                   <td>
-                    <strong>{ejecutivo.nombreCompleto}</strong>
+                    <strong>{ejecutivo.nombreCompleto ?? 'N/A'}</strong>
                     <div className="metric">#{index + 1}</div>
                   </td>
-                  <td>{ejecutivo.totalVisitas}</td>
-                  <td>{ejecutivo.totalVentas}</td>
-                  <td>${ejecutivo.montoTotalVentas.toLocaleString()}</td>
-                  <td>{ejecutivo.tasaConversion}%</td>
-                  <td>${ejecutivo.promedioVentaPorVisita.toLocaleString()}</td>
-                  <td>${ejecutivo.ticketPromedio.toLocaleString()}</td>
+                  <td>{ejecutivo.totalVisitas ?? 0}</td>
+                  <td>{ejecutivo.totalVentas ?? 0}</td>
+                  <td>${(ejecutivo.montoTotalVentas ?? 0).toLocaleString()}</td>
+                  <td>{ejecutivo.tasaConversion ?? 0}%</td>
+                  <td>${(ejecutivo.promedioVentaPorVisita ?? 0).toLocaleString()}</td>
+                  <td>${(ejecutivo.ticketPromedio ?? 0).toLocaleString()}</td>
                 </tr>
               ))}
             </tbody>
