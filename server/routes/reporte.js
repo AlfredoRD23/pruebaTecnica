@@ -61,11 +61,12 @@ module.exports = (pool) => {
                 console.log('Parametros:', params);
                 const [results] = await connection.execute(query, params);
 
+                // Asegurar que los valores acumulados sean números (evita concatenación de strings)
                 const totales = results.reduce((acc, row) => {
-                    acc.totalClientes += row.TotalClientes;
-                    acc.totalVisitas += row.TotalVisitas;
-                    acc.totalVentas += row.TotalVentas;
-                    acc.montoTotal += row.MontoTotalVentas;
+                    acc.totalClientes += Number(row.TotalClientes) || 0;
+                    acc.totalVisitas += Number(row.TotalVisitas) || 0;
+                    acc.totalVentas += Number(row.TotalVentas) || 0;
+                    acc.montoTotal += Number(row.MontoTotalVentas) || 0;
                     return acc;
                 }, { 
                     totalClientes: 0, 
@@ -74,12 +75,13 @@ module.exports = (pool) => {
                     montoTotal: 0 
                 });
 
-                totales.tasaConversionPromedio = totales.totalVisitas ? 
-                    (totales.totalVentas / totales.totalVisitas * 100).toFixed(2) : 0;
-                totales.ticketPromedioGeneral = totales.totalVentas ? 
-                    (totales.montoTotal / totales.totalVentas).toFixed(2) : 0;
-                totales.ventasPorClientePromedio = totales.totalClientes ? 
-                    (totales.totalVentas / totales.totalClientes).toFixed(2) : 0;
+                // Guardar promedios como números (no strings) para facilitar formateo en el cliente
+                totales.tasaConversionPromedio = totales.totalVisitas ?
+                    Number(((totales.totalVentas / totales.totalVisitas) * 100).toFixed(2)) : 0;
+                totales.ticketPromedioGeneral = totales.totalVentas ?
+                    Number((totales.montoTotal / totales.totalVentas).toFixed(2)) : 0;
+                totales.ventasPorClientePromedio = totales.totalClientes ?
+                    Number((totales.totalVentas / totales.totalClientes).toFixed(2)) : 0;
 
                 res.json({
                     filtros: {

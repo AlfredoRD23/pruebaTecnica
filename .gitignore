@@ -139,3 +139,5 @@ database/*.db
 !server/
 !server/src/
 !database/
+!database/**
+

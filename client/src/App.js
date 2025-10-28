@@ -66,14 +66,24 @@ function App() {
       currency: "DOP",
     });
 
-  const formatoPorcentaje = (valor) => `${Number(valor ?? 0).toFixed(2)}%`;
+  // Convierte valores que pueden venir como strings con símbolos o comas a número seguro
+  const safeNumber = (v) => {
+    if (v === null || v === undefined) return 0;
+    if (typeof v === "number") return v;
+    // eliminar todo lo que no sea dígito, signo menos, o punto decimal
+    const cleaned = String(v).replace(/[^0-9.-]+/g, "");
+    const n = parseFloat(cleaned);
+    return Number.isFinite(n) ? n : 0;
+  };
+
+  const formatoPorcentaje = (valor) => `${safeNumber(valor).toFixed(2)}%`;
 
   const calcularTotales = () => {
     return productividad.reduce(
       (totales, ejecutivo) => ({
-        totalVisitas: totales.totalVisitas + Number(ejecutivo.totalVisitas ?? 0),
-        totalVentas: totales.totalVentas + Number(ejecutivo.totalVentas ?? 0),
-        montoTotal: totales.montoTotal + Number(ejecutivo.montoTotalVentas ?? 0),
+        totalVisitas: totales.totalVisitas + safeNumber(ejecutivo.totalVisitas ?? 0),
+        totalVentas: totales.totalVentas + safeNumber(ejecutivo.totalVentas ?? 0),
+        montoTotal: totales.montoTotal + safeNumber(ejecutivo.montoTotalVentas ?? 0),
       }),
       { totalVisitas: 0, totalVentas: 0, montoTotal: 0 }
     );
